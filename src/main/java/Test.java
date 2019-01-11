@@ -39,7 +39,7 @@ public class Test extends JPanel implements Runnable {
 
     public void sendText(String name) {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-        Message message = Message.creator(new PhoneNumber("+12263873842"),
+        Message message = Message.creator(new PhoneNumber("+16474094989"),
                 new PhoneNumber("+12268871140"),
                 "Hey! " + name + " is trying to get in.").create();
     }
@@ -69,19 +69,24 @@ public class Test extends JPanel implements Runnable {
 
         this.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent me) {
+                
                 cvSaveImage("-aa.jpg", img);
                 try {
                     getImage();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-               //MAYBE HARD CODE FOR STRANGER CRASH 
-                if((Double.parseDouble(pojo.getImages()[0].getClassifiers()[0].getClasses()[0].getScore())) > 0.7)
-                    sendText(pojo.getImages()[0].getClassifiers()[0].getClasses()[0].getClassif());
-                else
+               //MAYBE HARD CODE FOR STRANGER CRASH
+               try{
+                    if((Double.parseDouble(pojo.getImages()[0].getClassifiers()[0].getClasses()[0].getScore())) > 0.65)
+                        sendText(pojo.getImages()[0].getClassifiers()[0].getClasses()[0].getClassif());
+                    else
+                        sendText("A stranger");
+                } catch (Exception e){
                     sendText("A stranger");
-
-            }
+                }
+            
+        }
 
             public void mousePressed(MouseEvent me) {
 
@@ -106,6 +111,7 @@ public class Test extends JPanel implements Runnable {
 
         int i = 0;
         try {
+            
             grabber.start();
             while (true) {
                 Frame frame = grabber.grab();
@@ -125,6 +131,7 @@ public class Test extends JPanel implements Runnable {
     }
 
     public static void main(String[] args) {
+        
         JFrame window = new JFrame("Hello");
         Test gs = new Test();
         window.setContentPane(gs);
